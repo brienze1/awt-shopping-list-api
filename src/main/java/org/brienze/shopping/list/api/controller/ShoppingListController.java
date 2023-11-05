@@ -1,5 +1,6 @@
 package org.brienze.shopping.list.api.controller;
 
+import org.brienze.shopping.list.api.annotation.Authorized;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -9,12 +10,14 @@ import java.util.UUID;
 public class ShoppingListController {
 
     @PostMapping
+    @Authorized
     public void create() {
-
+        System.out.println("Created");
     }
 
     @PutMapping
     public void edit() {
+        System.out.println("Edit");
 
     }
 

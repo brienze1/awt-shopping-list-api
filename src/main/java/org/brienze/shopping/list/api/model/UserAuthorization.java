@@ -46,4 +46,7 @@ public class UserAuthorization {
     @JsonProperty("expires_at")
     private Date expiresAt;
 
+    protected String getToken() {
+        return token;
+    }
 }

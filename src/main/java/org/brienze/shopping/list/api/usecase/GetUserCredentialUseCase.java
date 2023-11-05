@@ -14,9 +14,13 @@ public class GetUserCredentialUseCase {
         this.userCredentialPersistence = userCredentialPersistence;
     }
 
-    public UserCredential get(String authorization) {
+    public UserCredential getByBasicAuthorization(String authorization) {
         String username = PasswordUtils.decodeUsername(authorization);
 
+        return userCredentialPersistence.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public UserCredential getByUsername(String username) {
         return userCredentialPersistence.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
     }
 

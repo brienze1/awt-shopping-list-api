@@ -2,10 +2,14 @@ package org.brienze.shopping.list.api.model;
 
 import io.jsonwebtoken.security.Keys;
 import jakarta.persistence.*;
+import org.brienze.shopping.list.api.exception.InvalidToken;
+import org.brienze.shopping.list.api.utils.JwtUtils;
 import org.brienze.shopping.list.api.utils.PasswordUtils;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -55,6 +59,16 @@ public class UserCredential {
 
     public boolean allows(String hashedPassword) {
         return hashedPassword.equals(password);
+    }
+
+    public void validate(String token) {
+        if (Optional.of(this.userAuthorization)
+                    .orElse(new HashSet<>())
+                    .stream()
+                    .map(UserAuthorization::getToken)
+                    .noneMatch(savedToken -> savedToken.equals(token)) || !JwtUtils.isValid(token)) {
+            throw new InvalidToken();
+        }
     }
 
     public UserAuthorization authorization() {

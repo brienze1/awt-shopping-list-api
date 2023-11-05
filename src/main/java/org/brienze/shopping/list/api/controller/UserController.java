@@ -34,7 +34,7 @@ public class UserController {
 
     @PostMapping(path = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<?> authenticate(@RequestHeader("Authorization") String authorization) {
-        UserCredential userCredential = getUserCredentialUseCase.get(authorization);
+        UserCredential userCredential = getUserCredentialUseCase.getByBasicAuthorization(authorization);
 
         UserAuthorization userAuthorization = authorizeUserUseCase.authorize(authorization, userCredential);
 
