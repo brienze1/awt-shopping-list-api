@@ -5,6 +5,7 @@ import org.brienze.shopping.list.api.model.ShoppingList;
 import org.brienze.shopping.list.api.persistence.ShoppingListPersistence;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @Component
@@ -20,4 +21,7 @@ public class GetShoppingListUseCase {
         return shoppingListPersistence.findById(id).orElseThrow(ShoppingListNotFound::new);
     }
 
+    public Collection<ShoppingList> findByUserIdPageable(UUID userId, Integer page, Integer limit) {
+        return shoppingListPersistence.findByUserIdPageable(userId, page, limit);
+    }
 }

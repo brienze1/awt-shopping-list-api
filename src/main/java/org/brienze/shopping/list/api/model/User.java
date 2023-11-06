@@ -35,7 +35,7 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserCredential userCredential;
 
-    protected UUID getId() {
+    public UUID getId() {
         return id;
     }
 }
