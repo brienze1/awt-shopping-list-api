@@ -1,5 +1,6 @@
 package org.brienze.shopping.list.api.usecase;
 
+import org.brienze.shopping.list.api.exception.UnauthorizedUserException;
 import org.brienze.shopping.list.api.model.UserAuthorization;
 import org.brienze.shopping.list.api.model.UserCredential;
 import org.brienze.shopping.list.api.persistence.UserAuthorizationPersistence;
@@ -22,7 +23,7 @@ public class AuthorizeUserUseCase {
         String hashedPassword = PasswordUtils.hash(authorization, userCredential.salt());
 
         if (!userCredential.allows(hashedPassword)) {
-            throw new RuntimeException("Wrong password");
+            throw new UnauthorizedUserException();
         }
 
         return userAuthorizationPersistence.save(userCredential.authorization());

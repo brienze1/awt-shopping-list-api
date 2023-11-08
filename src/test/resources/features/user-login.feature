@@ -46,11 +46,11 @@ Feature: User login functionality
   @failure
   Scenario: User login failure - user does not exist
     When I call the user login path with the username "john" and password "password"
-    Then the status returned must be 409
+    Then the status returned must be 403
     And the field "id" returned must be "not null"
     And the field "description" returned must be "User not authorized"
-    And the field "status" returned must be "409"
-    And the field "error" returned must be "CONFLICT"
+    And the field "status" returned must be "403"
+    And the field "error" returned must be "FORBIDDEN"
 
   @failure
   Scenario: User login failure - user password is wrong
@@ -64,8 +64,8 @@ Feature: User login functionality
       }
     """
     When I call the user login path with the username "john" and password "aaabbb123"
-    Then the status returned must be 409
+    Then the status returned must be 403
     And the field "id" returned must be "not null"
     And the field "description" returned must be "User not authorized"
-    And the field "status" returned must be "409"
-    And the field "error" returned must be "CONFLICT"
+    And the field "status" returned must be "403"
+    And the field "error" returned must be "FORBIDDEN"

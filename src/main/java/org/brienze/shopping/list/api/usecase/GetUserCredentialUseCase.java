@@ -1,5 +1,6 @@
 package org.brienze.shopping.list.api.usecase;
 
+import org.brienze.shopping.list.api.exception.UnauthorizedUserException;
 import org.brienze.shopping.list.api.model.UserCredential;
 import org.brienze.shopping.list.api.persistence.UserCredentialPersistence;
 import org.brienze.shopping.list.api.utils.PasswordUtils;
@@ -17,7 +18,7 @@ public class GetUserCredentialUseCase {
     public UserCredential getByBasicAuthorization(String authorization) {
         String username = PasswordUtils.decodeUsername(authorization);
 
-        return userCredentialPersistence.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        return userCredentialPersistence.findByUsername(username).orElseThrow(UnauthorizedUserException::new);
     }
 
     public UserCredential getByUsername(String username) {
