@@ -1,14 +1,12 @@
 package org.brienze.shopping.list.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import jakarta.persistence.*;
+import org.brienze.shopping.list.api.exception.InvalidField;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -16,13 +14,12 @@ import java.util.stream.Collectors;
 public class ShoppingList {
 
     @Id
-    @GeneratedValue
     @Column(name = "id")
-    @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(value = "id")
     private UUID id;
 
     @Column(name = "user_id")
-    @JsonIgnore
+    @JsonProperty(value = "user_id", access = JsonProperty.Access.WRITE_ONLY)
     private UUID userId;
 
     @Column(name = "name")
@@ -33,6 +30,19 @@ public class ShoppingList {
     @JsonProperty("items")
     private Set<Item> items;
 
+    @PrePersist
+    protected void onCreate() {
+        if (Objects.isNull(this.id)) {
+            this.id = UUID.randomUUID();
+        }
+    }
+
+    @JsonSetter
+    public void setName(String name) {
+        this.name =
+                Optional.ofNullable(name).filter(value -> !value.isBlank()).orElseThrow(() -> new InvalidField("Shopping list name must be valid"));
+    }
+
     @JsonSetter("items")
     public void setItems(Set<Item> items) {
         this.items = Optional.ofNullable(this.items).orElse(new HashSet<>());
@@ -40,12 +50,17 @@ public class ShoppingList {
         this.items.addAll(Optional.ofNullable(items).orElse(new HashSet<>()).stream().map(item -> new Item(this, item)).collect(Collectors.toSet()));
     }
 
-    public UUID getId() {
-        return id;
+    @JsonGetter("items")
+    public Set<Item> getItems() {
+        return Optional.ofNullable(items)
+                       .orElse(new HashSet<>())
+                       .stream()
+                       .sorted(Comparator.comparing(Item::getName))
+                       .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    public Set<Item> getItems() {
-        return items;
+    public UUID getId() {
+        return id;
     }
 
     public void setUser(User user) {

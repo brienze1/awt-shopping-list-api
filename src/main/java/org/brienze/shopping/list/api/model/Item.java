@@ -1,8 +1,12 @@
 package org.brienze.shopping.list.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import jakarta.persistence.*;
+import org.brienze.shopping.list.api.exception.InvalidField;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -12,16 +16,17 @@ public class Item {
     public Item() {
     }
 
-    public Item(ShoppingList shoppingList, Item item) {
+    protected Item(ShoppingList shoppingList, Item item) {
         this.shoppingList = shoppingList;
-        this.name = item.name;
-        this.quantity = item.quantity;
+        this.name = Optional.ofNullable(item.name).filter(value -> !value.isBlank()).orElseThrow(() -> new InvalidField("Item name must be valid"));
+        this.quantity =
+                Optional.ofNullable(item.quantity).filter(value -> value > 0).orElseThrow(() -> new InvalidField("Item quantity must be valid"));
     }
 
     @Id
     @GeneratedValue
     @Column(name = "id")
-    @JsonProperty("id")
+    @JsonIgnore
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,7 +40,22 @@ public class Item {
     @JsonProperty("quantity")
     private Integer quantity;
 
-    public void setShoppingList(ShoppingList shoppingList) {
+    protected void setShoppingList(ShoppingList shoppingList) {
         this.shoppingList = shoppingList;
+    }
+
+    protected String getName() {
+        return name;
+    }
+
+    @JsonSetter
+    public void setName(String name) {
+        this.name = Optional.ofNullable(name).filter(value -> !value.isBlank()).orElseThrow(() -> new InvalidField("Item name must be valid"));
+    }
+
+    @JsonSetter
+    public void setQuantity(Integer quantity) {
+        this.quantity =
+                Optional.ofNullable(quantity).filter(value -> value > 0).orElseThrow(() -> new InvalidField("Item quantity must be valid"));
     }
 }

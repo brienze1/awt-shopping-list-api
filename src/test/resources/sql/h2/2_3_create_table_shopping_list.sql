@@ -1,4 +1,4 @@
-SET SCHEMA 'shopping_list';
+SET SCHEMA shopping_list;
 
 CREATE TABLE shopping_list
 (

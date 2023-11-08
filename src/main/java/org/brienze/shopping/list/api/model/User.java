@@ -2,24 +2,30 @@ package org.brienze.shopping.list.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import org.brienze.shopping.list.api.exception.InvalidField;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user", schema = "shopping_list")
+@Table(name = "users", schema = "shopping_list")
 public class User {
 
     public User() {
     }
 
     public User(CreateUserRequest createUserRequest) {
-        this.firstName = createUserRequest.getFirstName();
-        this.lastName = createUserRequest.getLastName();
+        this.id = Optional.ofNullable(createUserRequest.getId()).orElse(UUID.randomUUID());
+        this.firstName = Optional.ofNullable(createUserRequest.getFirstName())
+                                 .filter(value -> !value.isBlank())
+                                 .orElseThrow(() -> new InvalidField("First name must be valid"));
+        this.lastName = Optional.ofNullable(createUserRequest.getLastName())
+                                .filter(value -> !value.isBlank())
+                                .orElseThrow(() -> new InvalidField("Last name must be valid"));
         this.userCredential = new UserCredential(this, createUserRequest.getUsername(), createUserRequest.getPassword());
     }
 
     @Id
-    @GeneratedValue
     @Column(name = "id")
     @JsonProperty("id")
     private UUID id;

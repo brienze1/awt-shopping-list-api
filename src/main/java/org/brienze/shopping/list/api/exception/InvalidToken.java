@@ -4,10 +4,10 @@ import org.springframework.http.HttpStatus;
 
 public class InvalidToken extends ShoppingListException {
     public InvalidToken() {
-        super(HttpStatus.UNAUTHORIZED, "Token is invalid");
+        super(HttpStatus.FORBIDDEN, "Token is invalid");
     }
 
     public InvalidToken(Throwable cause) {
-        super(cause, HttpStatus.UNAUTHORIZED, "Token is invalid");
+        super(cause, HttpStatus.FORBIDDEN, "Token is invalid");
     }
 }

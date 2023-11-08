@@ -7,6 +7,7 @@ import org.brienze.shopping.list.api.model.UserCredential;
 import org.brienze.shopping.list.api.usecase.AuthorizeUserUseCase;
 import org.brienze.shopping.list.api.usecase.CreateUserUseCase;
 import org.brienze.shopping.list.api.usecase.GetUserCredentialUseCase;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> create(@RequestBody CreateUserRequest createUserRequest) {
-        return ResponseEntity.ok(createUserUseCase.create(createUserRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(createUserUseCase.create(createUserRequest));
     }
 
     @PostMapping(path = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)

@@ -1,7 +1,9 @@
 package org.brienze.shopping.list.api.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.jsonwebtoken.security.Keys;
 import jakarta.persistence.*;
+import org.brienze.shopping.list.api.exception.InvalidField;
 import org.brienze.shopping.list.api.exception.InvalidToken;
 import org.brienze.shopping.list.api.utils.JwtUtils;
 import org.brienze.shopping.list.api.utils.PasswordUtils;
@@ -22,9 +24,13 @@ public class UserCredential {
 
     public UserCredential(User user, String username, String password) {
         this.user = user;
-        this.username = username;
+        this.username = Optional.ofNullable(username).filter(value -> !value.isBlank()).orElseThrow(() -> new InvalidField("Username must be valid"));
         this.secret = UUID.randomUUID();
-        this.password = PasswordUtils.hash(username, password, this.salt());
+        this.password = PasswordUtils.hash(username,
+                                           Optional.ofNullable(password)
+                                                   .filter(value -> !value.isBlank())
+                                                   .orElseThrow(() -> new InvalidField("Password must be valid")),
+                                           this.salt());
     }
 
     @Id
@@ -36,7 +42,8 @@ public class UserCredential {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
+    @JsonProperty("username")
     private String username;
 
     @Column(name = "password")

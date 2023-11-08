@@ -62,11 +62,10 @@ public class ShoppingListController {
                                                            @RequestParam(value = "limit", required = false) Integer limit) {
         User user = getUserUseCase.findByToken(token);
 
-        return ResponseEntity.status(HttpStatus.OK).body(getShoppingListUseCase.findByUserIdPageable(
-                user.getId(),
-                Optional.ofNullable(page).orElse(0),
-                Optional.ofNullable(limit).orElse(10)
-        ));
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(getShoppingListUseCase.findByUserIdPageable(user.getId(),
+                                                                               Optional.ofNullable(page).filter(value -> value >= 0).orElse(0),
+                                                                               Optional.ofNullable(limit).filter(value -> value > 0).orElse(10)));
     }
 
     @GetMapping("/{id}")

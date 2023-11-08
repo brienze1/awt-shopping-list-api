@@ -29,7 +29,7 @@ public class JwtUtils {
             String encodedPayload = token.split("\\.")[0];
             String decodedPayload = new String(Base64.getDecoder().decode(encodedPayload));
             return new ObjectMapper().readTree(decodedPayload).get("username").asText();
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             throw new InvalidToken(e);
         }
     }

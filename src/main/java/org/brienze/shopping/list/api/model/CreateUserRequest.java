@@ -2,7 +2,12 @@ package org.brienze.shopping.list.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.UUID;
+
 public class CreateUserRequest {
+
+    @JsonProperty("id")
+    private UUID id;
 
     @JsonProperty("username")
     private String username;
@@ -15,6 +20,10 @@ public class CreateUserRequest {
 
     @JsonProperty("last_name")
     private String lastName;
+
+    public UUID getId() {
+        return id;
+    }
 
     protected String getUsername() {
         return username;
