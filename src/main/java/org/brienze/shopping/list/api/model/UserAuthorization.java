@@ -20,7 +20,7 @@ public class UserAuthorization {
     public UserAuthorization(UUID userCredentialId, String username, SecretKey secretKey) {
         this.userCredentialId = userCredentialId;
         this.issuedAt = new Date(System.currentTimeMillis());
-        this.expiresAt = new Date(System.currentTimeMillis() + Duration.ofMinutes(5).toMillis());
+        this.expiresAt = new Date(System.currentTimeMillis() + Duration.ofHours(5).toMillis());
         this.token = JwtUtils.generate(username, secretKey, this.issuedAt, this.expiresAt);
     }
 

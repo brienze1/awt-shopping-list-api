@@ -37,6 +37,11 @@ public class ShoppingList {
         }
     }
 
+    @JsonGetter
+    public String getName() {
+        return this.name;
+    }
+
     @JsonSetter
     public void setName(String name) {
         this.name =
@@ -68,6 +73,7 @@ public class ShoppingList {
     }
 
     public void updateFrom(ShoppingList shoppingList) {
+        this.name = Optional.ofNullable(shoppingList).map(ShoppingList::getName).orElse(this.name);
         this.items.clear();
         Optional.ofNullable(shoppingList)
                 .map(ShoppingList::getItems)

@@ -51,7 +51,7 @@ Feature: Update shopping list functionality
     When I call the shopping-list update path with the id "3ec448f1-dcf4-4f09-ae32-24eb56b4ba3f" and the following body
     """
       {
-        "name": "Tesco shopping list",
+        "name": "Tesca shopping list",
         "items": [
           {
             "name": "milk",
@@ -70,7 +70,7 @@ Feature: Update shopping list functionality
     """
     Then the status returned must be 200
     And the field "id" returned must be "3ec448f1-dcf4-4f09-ae32-24eb56b4ba3f"
-    And the field "name" returned must be "Tesco shopping list"
+    And the field "name" returned must be "Tesca shopping list"
     And the field "items.0.id" returned must be "null"
     And the field "items.0.name" returned must be "milk"
     And the field "items.0.quantity" returned must be "12"
@@ -120,7 +120,7 @@ Feature: Update shopping list functionality
     When I call the shopping-list update path with the id "3ec448f1-dcf4-4f09-ae32-24eb56b4ba3f" and the following body
     """
       {
-        "name": "Tesco shopping list",
+        "name": "Tesca shopping list",
         "items": [
           {
             "name": "milk",
@@ -138,7 +138,7 @@ Feature: Update shopping list functionality
       }
     """
     Then the status returned must be 200
-    And the "shopping_list" table must contain 1 row with the "name" "Tesco shopping list"
+    And the "shopping_list" table must contain 1 row with the "name" "Tesca shopping list"
     And the "items" table must contain 1 row with the "name" "milk"
     And the "items" table must contain 0 row with the "name" "soap"
     And the "items" table must contain 0 row with the "name" "lemon"
