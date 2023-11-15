@@ -2,8 +2,8 @@ version: "3"
 
 services:
 
-  postgres:
-    container_name: shopping_list_db
+  shopping-list-db:
+    container_name: shopping-list-db
     image: postgres:14
     environment:
       POSTGRES_DB: shopping_list
@@ -13,3 +13,13 @@ services:
       - ./sql:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
+
+  shopping-list-api:
+    depends_on:
+      - shopping-list-db
+    container_name: shopping-list-api
+    build:
+      context: ../../awt-shopping-list-api
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
